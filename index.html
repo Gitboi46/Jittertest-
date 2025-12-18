@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MindAR — testing</title>
+    <title>MindAR — Sneakers AR Ads</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <style>
@@ -45,6 +45,10 @@
     <div id="controls">
       <button class="video-btn active" data-video="#video1">Casual Ad</button>
       <button class="info-btn" data-desc="casual">i</button>
+      <button class="video-btn" data-video="#video2">Formal Ad</button>
+      <button class="info-btn" data-desc="formal">i</button>
+      <button class="video-btn" data-video="#video3">Trekking Ad</button>
+      <button class="info-btn" data-desc="trek">i</button>
     </div>
     <div id="descOverlay">
       <h2 id="descTitle">Casual Sneakers Video</h2>
@@ -52,25 +56,18 @@
       <button id="closeDesc">Close</button>
     </div>
     <a-scene
-      mindar-image="imageTargetSrc: https://raw.githubusercontent.com/Gitboi46/Ar-business-card/main/targets%20(1)%20(1).mind; filterMinCF:0.001; filterBeta:1000;"
+      mindar-image="imageTargetSrc: https://raw.githubusercontent.com/Gitboi46/Ar-business-card/main/targets%20(1)%20(1).mind; filterMinCF:0.0005; filterBeta:1000;"
       color-space="sRGB" renderer="colorManagement: true" vr-mode-ui="enabled: false"
       embedded style="width:100%; height:100vh;">
       <a-assets timeout="60000">
-        <!-- Only one video is now used. Replace the src with your real video when ready -->
-        <video id="video1" src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" loop="true" muted crossorigin="anonymous" playsinline webkit-playsinline></video>
+        <!-- Free sneaker 3D model (GLTF) - Replace with your own if needed -->
+        <a-asset-item id="sneaker-model" src="https://s3.us-east-2.amazonaws.com/www.runwayml.com/demos/mind-ar-sneaker.glb"></a-asset-item>
       </a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
       <!-- Main AR content attached to the marker -->
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- Video plane that exactly covers the marker, lies flat, and sticks perfectly -->
-        <a-plane
-          src="#video1"
-          width="1.1"
-          height="0.6"
-          position="0 0 0"
-          rotation="0 0 0"
-          material="shader: flat; side: double">
-        </a-plane>
+        <!-- 3D sneaker model replacing the video plane -->
+        <a-entity gltf-model="#sneaker-model" position="0 0 0" rotation="0 0 0" scale="0.01 0.01 0.01"></a-entity>
       </a-entity>
       <a-entity light="type: ambient; intensity: 1"></a-entity>
       <a-entity light="type: directional; intensity: 1.5" position="1 2 1"></a-entity>
@@ -80,7 +77,6 @@
   const overlay = document.getElementById('descOverlay');
   const titleEl = document.getElementById('descTitle');
   const textEl = document.getElementById('descText');
-  const videoEl = document.getElementById('video1');
 
   const descriptions = {
     casual: { title: "Casual Sneakers Video", text: "A dynamic video showcasing lightweight and breathable sneakers designed for all-day comfort. Perfect for casual outings, walking, or daily wear." },
@@ -105,19 +101,14 @@
   const sceneEl = document.querySelector('a-scene');
 
   sceneEl.addEventListener('targetFound', () => {
-    status.textContent = "Target Found – Playing";
+    status.textContent = "Target Found – Model Loaded";
     status.classList.add('found');
-    videoEl.play();
   });
 
   sceneEl.addEventListener('targetLost', () => {
     status.textContent = "Target Lost";
     status.classList.remove('found');
-    videoEl.pause();
   });
-
-  // Preload video (muted required for reliable autoplay on mobile)
-  videoEl.muted = true;
 </script>
   </body>
 </html>
