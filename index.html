@@ -56,50 +56,55 @@
       color-space="sRGB" renderer="colorManagement: true" vr-mode-ui="enabled: false"
       embedded style="width:100%; height:100vh;">
       <a-assets timeout="60000">
-        <!-- Your sneaker 3D model -->
-        <a-asset-item id="sneaker-model" src="https://raw.githubusercontent.com/Gitboi46/Ar-Shoe-test/main/Shoe%2001%20(1).glb"></a-asset-item>
+        <a-asset-item id="sneakerModel" src="https://raw.githubusercontent.com/Gitboi46/Ar-Shoe-test/main/Shoe%2001%20(1).glb" crossorigin="anonymous"></a-asset-item>
       </a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-      <!-- Main AR content attached to the marker -->
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- 3D sneaker model with reduced size -->
-        <a-entity gltf-model="#sneaker-model" position="0 0 0" rotation="-90 0 0" scale="0.3 0.3 0.3" animation-mixer></a-entity>
+        <a-entity 
+          gltf-model="#sneakerModel"
+          position="0 0.02 0"
+          rotation="0 90 90"
+          scale="0.005 0.005 0.005"
+        ></a-entity>
       </a-entity>
       <a-entity light="type: ambient; intensity: 1"></a-entity>
       <a-entity light="type: directional; intensity: 1.5" position="1 2 1"></a-entity>
     </a-scene>
-<script>
-  const status = document.getElementById('markerStatus');
-  const overlay = document.getElementById('descOverlay');
-  const titleEl = document.getElementById('descTitle');
-  const textEl = document.getElementById('descText');
-  const descriptions = {
-    casual: { title: "Casual Sneakers Video", text: "A dynamic video showcasing lightweight and breathable sneakers designed for all-day comfort. Perfect for casual outings, walking or daily wear." },
-  };
-  // Info buttons (kept unchanged)
-  document.querySelectorAll('.info-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const desc = descriptions[btn.dataset.desc];
-      if (desc) {
-        titleEl.textContent = desc.title;
-        textEl.textContent = desc.text;
-        overlay.classList.add('active');
-      }
-    });
-  });
-  document.getElementById('closeDesc').addEventListener('click', () => {
-    overlay.classList.remove('active');
-  });
-  // Marker tracking events
-  const sceneEl = document.querySelector('a-scene');
-  sceneEl.addEventListener('targetFound', () => {
-    status.textContent = "Target Found – Model Loaded";
-    status.classList.add('found');
-  });
-  sceneEl.addEventListener('targetLost', () => {
-    status.textContent = "Target Lost";
-    status.classList.remove('found');
-  });
-</script>
+    <script>
+      const status = document.getElementById('markerStatus');
+      const overlay = document.getElementById('descOverlay');
+      const titleEl = document.getElementById('descTitle');
+      const textEl = document.getElementById('descText');
+
+      const descriptions = {
+        casual: { title: "Casual Sneakers Video", text: "A dynamic video showcasing lightweight and breathable sneakers designed for all-day comfort. Perfect for casual outings, walking, or daily wear." },
+      };
+
+      document.querySelectorAll('.info-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const desc = descriptions[btn.dataset.desc];
+          if (desc) {
+            titleEl.textContent = desc.title;
+            textEl.textContent = desc.text;
+            overlay.classList.add('active');
+          }
+        });
+      });
+      document.getElementById('closeDesc').addEventListener('click', () => {
+        overlay.classList.remove('active');
+      });
+
+      const sceneEl = document.querySelector('a-scene');
+
+      sceneEl.addEventListener('targetFound', () => {
+        status.textContent = "Target Found";
+        status.classList.add('found');
+      });
+
+      sceneEl.addEventListener('targetLost', () => {
+        status.textContent = "Target Lost";
+        status.classList.remove('found');
+      });
+    </script>
   </body>
 </html>
